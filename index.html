@@ -1,0 +1,1062 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+<style>
+*{ margin:0; padding:0;}
+em,i{ font-style:normal;}
+strong{ font-weight:normal;}
+
+.fl{ float:left;}
+.fr{ float:right;}
+.clearFiex{zoom:1;}
+.clearFiex:after{content:''; display:block; clear:both;}
+/* 文字不可选 */
+.ac-unselect{-webkit-user-select: none; /* Chrome all / Safari all */
+-moz-user-select: none; /* Firefox all */
+-ms-user-select: none; /* IE 10+ */ /* No support for these yet, use at own risk */
+-o-user-select: none;
+user-select: none;}
+
+
+.z-wrap{ color:#333; width:1000px; height:500px; margin:0px auto; /*border:1px solid #ccc; border-bottom:none;*/ background-color:#fff; position:relative; }
+.z-wrap > strong{ position:absolute; bottom:-45px; width:80px; text-align:center; margin-left:-40px;}
+.z-wrap > strong:nth-of-type(1){ left:25%}
+.z-wrap > strong:nth-of-type(2){ left:50%}
+.z-wrap > strong:nth-of-type(3){ left:75%}
+.z-wrap > strong > i{ width:1px; height:5px; background-color:#ccc; overflow:hidden; position:absolute; top:-16px; left:50%;}
+.z-item{ background-color:#f0f0f0; height:50px; border:1px solid #ccc; position:relative; margin-top:-1px;}
+.z-item > div{ height:100%; position:relative; overflow:hidden;}
+.z-item > div:nth-of-type(1){ background-color:#fff;}
+.z-item > div >p{ border-bottom-right-radius:5px; border-top-right-radius:5px; width:0%; position:relative; z-index:2;}
+.z-item > div > p >strong{ position:absolute; left:0px; bottom:0px; width:0%; z-index:1; border-bottom-right-radius:5px; border-top-right-radius:5px; transition:all .5s; background-color:#e3e3e3;/* rgba(61,150,1,0.2); animation:bkc 10s 1s alternate infinite;*/}
+
+.st-title{ width:1000px; margin:0px auto; padding:20px 0px; overflow:hidden; zoom:1;}
+.st-title .st-tl-wrap{ padding:0px 6px; height:16px; line-height:16px; font-size:14px; margin-bottom:5px; position:relative; float:left; margin-right:5px; cursor:pointer;}
+.st-title .st-tl-wrap em{ position:absolute; top:0px; left:10px; width:24px; height:16px; background:red; border-radius:3px;}
+.st-title .st-tl-wrap strong{ display:inline-block; height:16px; line-height:16px; padding-left:30px;}
+.st-title .st-tl-wrap.del{ background-color:#ddd; margin-right:5px; border-radius:4px; color:#f0f0f0; cursor:pointer;}
+
+.z-tit{ position:absolute; width:100px; text-align:right; top:-9px; left:-110px;}
+.z-tit span{ position:absolute; top:8px; right:-10px; height:1px; width:5px; overflow:hidden; background-color:#ccc;}
+.star-time,.end-time{ position:absolute;}
+.star-time{ left:-41px;}
+.end-time{ right:-41px;}
+.v-line{ height:511px; width:1px; background:red; z-index:9; position:absolute; top:0px; left:0px;}
+.v-line i{ position:absolute; top:30%; left:-5px; height:20px; padding:0px 5px; color:#fff; border-radius:2px; background:red; font-style:normal; text-align:center; cursor:default; animation:flipInY 1s 1s ease-in-out; /*opacity:0; animation-fill-mode:forwards;*/}
+.v-line i.active{ -webkit-animation:bigger_ 1s 1s ease-in-out; animation:bigger_ .5s ease-in-out;}
+.v-line i b{ position:absolute; bottom:-22px; right:-73px; width:90px; color:red; display:none;}
+.v-line font{ position:absolute; left:-40px; bottom:-24px; color:#fff; width:80px; text-align:center; background-color:red; border-radius:3px;}
+.v-line font em{ top:-4px; left:36px;}
+
+.meba{ position:absolute; width:100%; height:100%; z-index:999; background:#fff;}
+
+.b-bar{height:38px; width:1000px; margin:0px auto; background-color:rgba(91,252,69,0.3); border:1px solid #a4a7aa; position:relative;}
+.b-bar span{ position:absolute; width:10px; height:50px; top:-7px; left:0px; cursor:pointer; border-radius:6px; background:#63737e; z-index:2;}
+.b-bar span:nth-of-type(1){}
+.b-bar span:nth-of-type(2){ left:1000px;}
+.b-bar span i{ position:absolute; left:12px; top:16px; width:80px; color:#939393; opacity:0; -webkit-transition:all .5s; transition:all .5s;}
+.b-bar:hover span i{ opacity:1;}
+#btnStar i{ left:-82px; text-align:right;}
+.b-bar div{ height:100%; width:100%; background-color:#dddddd; position:absolute; z-index:1; width:0px;}
+.b-bar div:nth-of-type(1){ left:0px;}
+.b-bar div:nth-of-type(2){ right:0px;}
+
+.Del{ color:#ccc;}
+.Del em{ background-color:#f2f2f2!important;}
+
+/* 三角形 */
+.triangle_top_red{ position:absolute;width:0; height:0; overflow:hidden;border-left:4px solid transparent;border-right:4px solid transparent; }
+.triangle_top_red{ border-bottom:4px solid red; }
+
+@-webkit-keyframes bkc{
+	0%{ background-color:#BBF7C0;}
+	50%{ background-color:#FDD1C0;}
+	100%{ background-color:#BDF9F3;}
+}
+@keyframes bkc{
+	0%{ background-color:#BBF7C0;}
+	50%{ background-color:#FDD1C0;}
+	100%{ background-color:#BDF9F3;}	
+}
+
+@keyframes fp_{
+	0%{ transform:translateY(0deg);}
+	100%{ transform:translateY(360deg);}	
+}
+
+@-webkit-keyframes flipInY {
+  0% {
+    -webkit-transform: perspective(400px) rotate3d(0, 1, 0, 90deg);
+    transform: perspective(400px) rotate3d(0, 1, 0, 90deg);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+    opacity: 0;
+  }
+
+  40% {
+    -webkit-transform: perspective(400px) rotate3d(0, 1, 0, -20deg);
+    transform: perspective(400px) rotate3d(0, 1, 0, -20deg);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+  }
+
+  60% {
+    -webkit-transform: perspective(400px) rotate3d(0, 1, 0, 10deg);
+    transform: perspective(400px) rotate3d(0, 1, 0, 10deg);
+    opacity: 1;
+  }
+
+  80% {
+    -webkit-transform: perspective(400px) rotate3d(0, 1, 0, -5deg);
+    transform: perspective(400px) rotate3d(0, 1, 0, -5deg);
+  }
+
+  100% {
+    -webkit-transform: perspective(400px);
+    transform: perspective(400px);
+  }
+}
+
+@keyframes flipInY {
+  0% {
+    -webkit-transform: perspective(400px) rotate3d(0, 1, 0, 90deg);
+    transform: perspective(400px) rotate3d(0, 1, 0, 90deg);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+    opacity: 0;
+  }
+
+  40% {
+    -webkit-transform: perspective(400px) rotate3d(0, 1, 0, -20deg);
+    transform: perspective(400px) rotate3d(0, 1, 0, -20deg);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+  }
+
+  60% {
+    -webkit-transform: perspective(400px) rotate3d(0, 1, 0, 10deg);
+    transform: perspective(400px) rotate3d(0, 1, 0, 10deg);
+    opacity: 1;
+  }
+
+  80% {
+    -webkit-transform: perspective(400px) rotate3d(0, 1, 0, -5deg);
+    transform: perspective(400px) rotate3d(0, 1, 0, -5deg);
+  }
+
+  100% {
+    -webkit-transform: perspective(400px);
+    transform: perspective(400px);
+  }
+}
+
+@-webkit-keyframes bigger_{
+	0%{ -webkit-transform:scale(1); transform:scale(1);}
+	33%{ -webkit-transform:scale(0.8); transform:scale(0.8);}	
+	66%{ -webkit-transform:scale(1.2); transform:scale(1.2);}
+	100%{ -webkit-transform:scale(1); transform:scale(1);}
+}
+@keyframes bigger_{
+	0%{ -webkit-transform:scale(1); transform:scale(1);}
+	33%{ -webkit-transform:scale(0.8); transform:scale(0.8);}	
+	66%{ -webkit-transform:scale(1.2); transform:scale(1.2);}
+	100%{ -webkit-transform:scale(1); transform:scale(1);}
+}
+
+</style>
+</head>
+
+<body>
+
+<div style="height:200px;"></div>
+<div class="st-title">
+	<p class="st-tl-wrap"><em></em><strong>债权人色</strong></p>
+	<p class="st-tl-wrap"><em></em><strong>债权人1颜色</strong></p>
+	<p class="st-tl-wrap"><em></em><strong>债权10px颜色颜色颜色</strong></p>
+    
+	<p class="st-tl-wrap"><em></em><strong>债权人色</strong></p>
+	<p class="st-tl-wrap"><em></em><strong>债权人1颜色</strong></p>
+	<p class="st-tl-wrap"><em></em><strong>债权10px颜色颜色颜色</strong></p>
+</div>
+<div id="zWrap" class="z-wrap">
+	
+</div>
+<div id="bBar" class="b-bar ac-unselect">
+	<div class="fl"></div>
+	<span id="btnStar"><i>2016-3-17</i></span>
+    <span id="btnEnd"><i>2018-2-19</i></span>
+    <div class="fr"></div>
+</div>
+<div style="height:400px;"></div>
+
+</body>
+<script src="http://www.miaov.com/static/ie/js/jquery-1.11.3.min.js"></script>
+<script>
+//双向选择条
+var proTypeTwo = function(btn, bar, limit, flag){
+	this.btn = document.getElementById(btn);
+	this.bar = document.getElementById(bar);
+	this.limit = document.getElementById(limit);
+	this.plusMinus = flag;
+	this.nowTime = Date.parse(new Date());//当前时间戳
+	this.timeBox = $(".b-bar span i");
+	this.num_ = 0;
+	this.init();
+};
+proTypeTwo.prototype = {
+	init: function () {
+		var This = this, d = document, w = window, m = Math;
+		This.btn.onmousedown = function (e) {
+			var x = (e || w.event).clientX;
+			var l = this.offsetLeft;
+			var max = This.plusMinus ? This.bar.offsetWidth - this.offsetWidth + 8 : This.limit.offsetLeft - This.limit.offsetWidth;
+			
+			This.num_ = 0;
+			//This.timeBox.fadeIn();
+			
+			d.onmousemove = function (e) {
+				var thisX = (e || w.event).clientX;
+				var to = m.min(max, m.max(0, l + (thisX - x)));
+				to = This.plusMinus ? m.max(to, This.limit.offsetLeft + This.limit.offsetWidth ) : to;
+				This.btn.style.left = to + 'px';
+				This.ondrag(m.round(m.max(0, to / max) * 100), to);
+				w.getSelection ? w.getSelection().removeAllRanges() : d.selection.empty();
+				//计算两个时间 总毫秒数totalMillisecond  nowTime
+				//This.timeBox
+				var iTime_ = This.nowTime + to/(This.bar.offsetWidth-2)*totalMillisecond;
+				var itimexs = new Date(iTime_);//当前时间
+				if(This.plusMinus){//结束标签
+					This.timeBox.eq(1).html( formatDate(itimexs, "yyyy-MM-dd") ).data("time",itimexs);//计算结束时间
+					$(This.bar).find("div").eq(1).width(1000-to);
+				}else{//起始标签
+					This.timeBox.eq(0).html( formatDate(itimexs, "yyyy-MM-dd") ).data("time",itimexs);//计算开始时间
+					$(This.bar).find("div").eq(0).width(to);
+				}
+				//$('.v-line font span').html(formatDate(new Date(Date.parse(new Date())+totalMillisecond*(to/$('.z-wrap').width())),'yyyy-MM-dd'));
+				//$('.v-line i b').html(formatDate(new Date(Date.parse(new Date())+totalMillisecond*(to/$('.z-wrap').width())),'yyyy-MM-dd'));
+			};
+			document.onmouseup = function(){
+				document.onmousemove=null;
+				var starTime_ = $("#btnStar").find("i").data("time");
+				var endTime_ = $("#btnEnd").find("i").data("time");
+				//比对时间 相同不执行  不同 更改缓存时间&执行方法
+				if(This.num_==0){
+					changeData( starTime_, endTime_, function(){
+						setTimeout(function(){
+							//计算剩余份额
+							getFmoney();
+							//$(".v-line i").addClass("active");
+						},1000);
+						//$(".v-line i").removeClass("active");
+					} );//改变数据图
+				}
+				This.num_ ++;
+				//This.timeBox.fadeOut();
+			}
+		};
+	},
+	ondrag: function (pos, x) {
+		iw_ = Math.max(0, x);
+	}
+}
+
+var arrDel = [];
+var arrDelData= [];
+var arrNcolor = [];//债权人颜色
+var zqData = [
+	{
+		"debtID" : 2231,
+		"name" : "工艺品销售企业增补流动性资金HXP2P0000021",
+		"source" : "HXP2P0000021",
+		"amount" : 6200,
+		"available" : 2200,
+		"enddate" : "2016,8,23,0,0,0",
+		"list" : [
+			{
+				"enddate" : "2016,4,23,0,0,0",
+				"usedAmount" : 3000
+			}, {
+				"enddate" : "2016,5,1,0,0,0",
+				"usedAmount" : 500
+			}, {
+				"enddate" : "2016,7,23,0,0,0",
+				"usedAmount" : 500
+			}
+		]
+	},
+
+	{
+		"debtID" : 2232,
+		"name" : "钢材批发企业增补流动性资金HXP2P0000021",
+		"source" : "HXP2P0000021",
+		"amount" : 10000,
+		"available" : 5000,
+		"enddate" : "2016,6,23,0,0,0",
+		"list" : [
+			{
+				"enddate" : "2016,3,23,0,0,0",
+				"usedAmount" : 3000
+			}, {
+				"enddate" : "2016,4,1,0,0,0",
+				"usedAmount" : 1000
+			}, {
+				"enddate" : "2016,5,23,0,0,0",
+				"usedAmount" : 1000
+			}
+		]
+	},
+
+	{
+		"debtID" : 2233,
+		"name" : "测试HXP2P0000021",
+		"source" : "HXP2P0000021",
+		"amount" : 10100,
+		"available" : 2000,
+		"enddate" : "2016,7,5,0,0,0",
+		"list" : [
+			{
+				"enddate" : "2016,3,23,0,0,0",
+				"usedAmount" : 2100
+			}, {
+				"enddate" : "2016,4,1,0,0,0",
+				"usedAmount" : 5000
+			}, {
+				"enddate" : "2016,5,23,0,0,0",
+				"usedAmount" : 1000
+			}
+		]
+	},
+	
+	{
+		"debtID" : 2234,
+		"name" : "测试HXP2P0000036",
+		"source" : "HXP2P0000036",
+		"amount" : 5200,
+		"available" : 700,
+		"enddate" : "2016,7,29,0,0,0",
+		"list" : [
+			{
+				"enddate" : "2016,3,23,0,0,0",
+				"usedAmount" : 2100,
+			}, {
+				"enddate" : "2016,4,1,0,0,0",
+				"usedAmount" : 1000,
+			}, {
+				"enddate" : "2016,5,23,0,0,0",
+				"usedAmount" : 500,
+			}, {
+				"enddate" : "2016,5,23,0,0,0",
+				"usedAmount" : 900,
+			}
+		]
+	},
+	
+	{
+		"debtID" : 2235,
+		"name" : "测试HXP2P0000041",
+		"source" : "HXP2P0000041",
+		"amount" : 5200,
+		"available" : 700,
+		"enddate" : "2016,7,29,0,0,0",
+		"list" : [
+			{
+				"enddate" : "2016,3,23,0,0,0",
+				"usedAmount" : 2100,
+			}, {
+				"enddate" : "2016,4,1,0,0,0",
+				"usedAmount" : 1000,
+			}, {
+				"enddate" : "2016,5,23,0,0,0",
+				"usedAmount" : 500,
+			}, {
+				"enddate" : "2016,5,23,0,0,0",
+				"usedAmount" : 900,
+			}
+		]
+	},
+	
+	{
+		"debtID" : 2236,
+		"name" : "测试HXP2P0000041",
+		"source" : "HXP2P0000041",
+		"amount" : 5200,
+		"available" : 700,
+		"enddate" : "2016,7,29,0,0,0",
+		"list" : [
+			{
+				"enddate" : "2016,3,23,0,0,0",
+				"usedAmount" : 2100,
+			}, {
+				"enddate" : "2016,4,1,0,0,0",
+				"usedAmount" : 1000,
+			}, {
+				"enddate" : "2016,5,23,0,0,0",
+				"usedAmount" : 500,
+			}, {
+				"enddate" : "2016,5,23,0,0,0",
+				"usedAmount" : 900,
+			}
+		]
+	},
+	
+	{
+		"debtID" : 2237,
+		"name" : "测试HXP2P0000011",
+		"source" : "HXP2P0000011",
+		"amount" : 5200,
+		"available" : 700,
+		"enddate" : "2016,7,29,0,0,0",
+		"list" : [
+			{
+				"enddate" : "2016,3,23,0,0,0",
+				"usedAmount" : 2100,
+			}, {
+				"enddate" : "2016,4,1,0,0,0",
+				"usedAmount" : 1000,
+			}, {
+				"enddate" : "2016,5,23,0,0,0",
+				"usedAmount" : 500,
+			}, {
+				"enddate" : "2016,5,23,0,0,0",
+				"usedAmount" : 900,
+			}
+		]
+	},
+	
+	{
+		"debtID" : 2238,
+		"name" : "测试HXP2P0000011",
+		"source" : "HXP2P0000011",
+		"amount" : 5200,
+		"available" : 700,
+		"enddate" : "2016,7,29,0,0,0",
+		"list" : [
+			{
+				"enddate" : "2016,3,23,0,0,0",
+				"usedAmount" : 2100,
+			}, {
+				"enddate" : "2016,4,1,0,0,0",
+				"usedAmount" : 1000,
+			}, {
+				"enddate" : "2016,5,23,0,0,0",
+				"usedAmount" : 500,
+			}, {
+				"enddate" : "2016,5,23,0,0,0",
+				"usedAmount" : 900,
+			}
+		]
+	},
+	
+	{
+		"debtID" : 2239,
+		"name" : "测试HXP2P0000051",
+		"source" : "HXP2P0000051",
+		"amount" : 5200,
+		"available" : 700,
+		"enddate" : "2016,7,29,0,0,0",
+		"list" : [
+			{
+				"enddate" : "2016,3,23,0,0,0",
+				"usedAmount" : 2100,
+			}, {
+				"enddate" : "2016,4,1,0,0,0",
+				"usedAmount" : 1000,
+			}, {
+				"enddate" : "2016,5,23,0,0,0",
+				"usedAmount" : 500,
+			}, {
+				"enddate" : "2016,5,23,0,0,0",
+				"usedAmount" : 900,
+			}
+		]
+	},
+	
+	{
+		"debtID" : 2240,
+		"name" : "测试HXP2P0000051",
+		"source" : "HXP2P0000051",
+		"amount" : 5200,
+		"available" : 700,
+		"enddate" : "2016,7,29,0,0,0",
+		"list" : [
+			{
+				"enddate" : "2016,3,23,0,0,0",
+				"usedAmount" : 2100,
+			}, {
+				"enddate" : "2016,4,1,0,0,0",
+				"usedAmount" : 1000,
+			}, {
+				"enddate" : "2016,5,23,0,0,0",
+				"usedAmount" : 500,
+			}, {
+				"enddate" : "2016,5,23,0,0,0",
+				"usedAmount" : 900,
+			}
+		]
+	},
+	
+	{
+		"debtID" : 2241,
+		"name" : "测试HXP2P0000051",
+		"source" : "HXP2P0000051",
+		"amount" : 5200,
+		"available" : 700,
+		"enddate" : "2016,7,29,0,0,0",
+		"list" : [
+			{
+				"enddate" : "2016,3,23,0,0,0",
+				"usedAmount" : 2100,
+			}, {
+				"enddate" : "2016,4,1,0,0,0",
+				"usedAmount" : 1000,
+			}, {
+				"enddate" : "2016,5,23,0,0,0",
+				"usedAmount" : 500,
+			}, {
+				"enddate" : "2016,5,23,0,0,0",
+				"usedAmount" : 900,
+			}
+		]
+	},
+	
+	{
+		"debtID" : 2242,
+		"name" : "测试HXP2P0000051",
+		"source" : "HXP2P0000051",
+		"amount" : 5200,
+		"available" : 700,
+		"enddate" : "2016,7,29,0,0,0",
+		"list" : [
+			{
+				"enddate" : "2016,3,23,0,0,0",
+				"usedAmount" : 2100,
+			}, {
+				"enddate" : "2016,4,1,0,0,0",
+				"usedAmount" : 1000,
+			}, {
+				"enddate" : "2016,5,23,0,0,0",
+				"usedAmount" : 500,
+			}, {
+				"enddate" : "2016,5,23,0,0,0",
+				"usedAmount" : 900,
+			}
+		]
+	}
+];
+//复制zqData数据
+for( var i=0; i<zqData.length; i++){
+	arrDelData.push(zqData[i]);
+}
+
+var totalMillisecond = 0;//总毫秒数
+
+var statistics = function(obj){
+	this.obj = obj;
+	this.data = null;
+	this.arrColor = ["rgba(255,73,0,0.9)","rgba(255,187,0,0.9)","rgba(187,255,0,0.9)","rgba(0,255,153,0.9)","rgba(0,187,255,0.9)","rgba(154,0,255,0.9)","rgba(255,0,255,0.9)","rgba(82,0,82,0.9)","rgba(114,40,13,0.9)","rgba(0,255,204,0.9)"];
+	this.arrPerColor = ["c0c0f3","a6a7f4","9292f6","7e7ef7","6c6cf7","2092e9","3c8dcc","5858f8","4444f7","2828f8"];
+	this.maxDate = "";
+	this.amount = 0; //总金额
+	this.html_ = "";
+	this.ipAmount = 0;
+	this.objHeight = 0;
+	this.itemObj = null;
+	this.iTotal = 0;
+	this.iTotalLog = 0;
+	this.rTotalLog = 0;
+	this.ipTotal = 0;
+	//this.tp = null;
+	this.nowMsd = Date.parse(new Date());
+	this.maxDateMsd = "";
+	this.margin = [20,10];//[债权基本高度,maiginTop值]
+	this.creditors = 0;//债权人数量
+	this.nowCreditor = "";//临时记录债权人
+	
+	
+	this.init = function( iData ){
+		var This =this;
+		This.data = iData;
+		This.getHtml();
+		This.setAttr();	
+		return this.rTotalLog;
+	}
+	this.getHtml = function(){//获取html
+		this.obj.height( this.data.length*(this.margin[0]) );
+		var This = this;
+		This.html_ = "";
+		This.maxDate = This.data[0].enddate ? This.data[0].enddate : new Date();
+		$(This.data).each(function(i, e) {
+			This.ipAmount = 0;
+			This.amount += parseFloat(e.amount);
+			getNewColor(e.debtID,e.source,i,e.name);
+			//记录债权人 2016-3-15 creditors
+			var top = 0;
+			if(i==0){
+				This.nowCreditor = e.source;
+			}else{
+				if(This.nowCreditor!=e.source){
+					This.nowCreditor = e.source;
+					top = This.margin[1];
+					This.creditors ++;	
+				}else{
+					top = 0;	
+				}
+				//console.log(This.creditors);
+			}
+			This.html_ = "<div class='z-item clearFiex' data-money='"+e.amount+"' title='总标额："+e.amount+"；到期时间："+formatDate(new Date(),"yyyy-MM-dd")+"' style='margin-bottom:"+top+"px'>"+
+						"<em class='z-tit'>"+formatMoney(This.amount)+"<span></span></em>"+
+						//"<div class='fl' style='width:100%; background-color:"+getArrColor(e.source)+"'>"+
+						"<div class='fl' style='width:100%; background-color:#"+getArrColor(e.source)+"'>"+
+							$.map(e.list,function(o,k){
+								 This.ipAmount += parseFloat(o.usedAmount);
+								 This.maxDate = Date.parse(new Date( This.maxDate.split(',')[0],parseInt(This.maxDate.split(',')[1])-1,This.maxDate.split(',')[2],This.maxDate.split(',')[3],This.maxDate.split(',')[4],This.maxDate.split(',')[5]) )>Date.parse( new Date(o.enddate.split(',')[0],parseInt(o.enddate.split(',')[1])-1,o.enddate.split(',')[2],o.enddate.split(',')[3],o.enddate.split(',')[4],o.enddate.split(',')[5]) )?This.maxDate:o.enddate;
+								 return "<p class='share' data-money='"+o.usedAmount+"' data-amoney='"+This.ipAmount+"' data-date='"+o.enddate+"' style='width:0%; height:10%; background-color:"+This.arrColor[k%10]+";' title='份额"+(k+1)+"："+o.usedAmount+"；到期时间："+formatDate(new Date(),"yyyy-MM-dd")+"'></p>"
+							}).join("")+
+							"<p class='free-mf' data-money='"+e.available+"' data-amoney='"+( This.ipAmount+parseFloat(e.available) )+"' data-date='"+e.enddate+"' style='width:0%; height:10%; background-color:#fff; z-index:1;' title='未售出份额："+e.available+"；到期时间："+formatDate(new Date(),"yyyy-MM-dd")+"'><strong></strong></p>"+
+						
+						"</div>"+
+					"</div>" + This.html_; //This.ipAmount += parseFloat(o.available);
+		});
+		This.html_ += "<span class='star-time'></span><span class='end-time'></span><p id='vLine' class='v-line ac-unselect'><i id='vLineI' title='2016-3-9'><span></span><b>2016-3-10</b></i><font><span>2016-3-9</span><em class='triangle_top_red'></em></font></p>"+
+						"<strong><span>2016-1-9</span><i></i></strong>"+
+						"<strong><span>2016-2-9</span><i></i></strong>"+
+						"<strong><span>2016-3-9</span><i></i></strong>";
+		This.obj.html(This.html_);
+		
+		This.itemObj = This.obj.find(".z-item");
+		This.itemObj.each(function(i, e) {//获取总债权额
+			This.iTotal += parseFloat($(e).data("money"));
+			This.iTotalLog += Math.pow( parseFloat($(e).data("money")),1/5 );
+			This.rTotalLog += parseFloat($(e).data("money"));
+		});
+		
+		var stet = -This.data.length/2-40-(This.creditors)*This.margin[1];
+		var arrDate = This.maxDate.split(',');
+		$(".star-time").html( formatDate(new Date(),"yyyy-MM-dd") );
+		$(".end-time").html( formatDate(new Date(arrDate[0],parseInt(arrDate[1])-1,arrDate[2],arrDate[3],arrDate[4],arrDate[5]),"yyyy-MM-dd") );
+		//双向选择条时间
+		$("#btnStar i").html( formatDate(new Date(),"yyyy-MM-dd") );
+		$("#btnEnd i").html( formatDate(new Date(arrDate[0],parseInt(arrDate[1])-1,arrDate[2],arrDate[3],arrDate[4],arrDate[5]),"yyyy-MM-dd") );
+		
+		//计算总毫秒数
+		totalMillisecond = Date.parse(new Date(arrDate[0],parseInt(arrDate[1])-1,arrDate[2],arrDate[3],arrDate[4],arrDate[5])) - Date.parse(new Date());
+		$('.v-line').height(This.obj.height()+This.data.length+This.creditors*(This.margin[1]));
+		$(".star-time").css({top:$('.v-line').height()+16+"px"});
+		$(".end-time").css({top:$('.v-line').height()+16+"px"});
+		$("#bBar").css({"margin-top":($('.v-line').height()-$("#zWrap").height())+60+"px"});
+		$("#zWrap > strong").css({top:$('.v-line').height()+16+"px"});
+		This.maxDateMsd = Date.parse(new Date(arrDate[0],parseInt(arrDate[1])-1,arrDate[2],arrDate[3],arrDate[4],arrDate[5]));
+		//设置5分点 时间
+		var oStrongs = $("#zWrap > strong");
+		oStrongs.each(function(i, e) {
+			$(this).find('span').html(  formatDate( new Date(Date.parse(new Date())+totalMillisecond*(0.25*(i+1))),'yyyy-MM-dd' )  );
+        });
+	}
+	this.setAttr = function(){//设置属性
+		var This = this;
+		This.obj.data('totalMoney',This.rTotalLog);
+		This.obj.css({marginBottom:This.data.length*(This.margin[1]+1)});
+		This.itemObj.each(function(i, e) {
+			//$(e).height( Math.log( parseFloat($(this).data("money")) )/ This.iTotalLog *100+"%" );
+			$(e).height( Math.pow( parseFloat($(this).data("money")),1/5 )/ This.iTotalLog *(This.data.length*This.margin[0]) );
+			var iHeight = (Math.pow( parseFloat($(this).data("money")),1/5 )/ This.iTotalLog )*500; 
+			
+			//$(e).height( parseFloat($(this).data("money") )/ This.iTotal*100 +"%" );
+			//var iHeight = ( parseFloat($(this).data("money") )/This.iTotal)*500; 
+			
+			var tp = $(e).find("p");
+			$(tp).each(function(k, ele) {
+				var kArrayDate = $(ele).data("date").split(',');
+				var kDateMsd = Date.parse(new Date(kArrayDate[0],parseInt(kArrayDate[1])-1,kArrayDate[2],kArrayDate[3],kArrayDate[4],kArrayDate[5]));
+				$(ele).height( parseFloat($(ele).data("money"))/parseFloat($(tp).eq($(tp).length-1).data("amoney"))*100+"%" );
+				This.ipWidth = ((kDateMsd-This.nowMsd)/(This.maxDateMsd-This.nowMsd)).toFixed(2)*100+"%";
+				$(ele).stop(false,false).animate({"width":This.ipWidth},function(){
+					$(this).find("strong") ? $(this).find("strong").height(iHeight).stop(false,false).animate({"width":This.ipWidth}) : "";
+				});
+			});
+		});	
+		
+		setTimeout(function(){
+			//计算剩余份额
+			getFmoney();
+		},1000)
+		
+		//显示图例
+		var tlHtml = $.map(arrNcolor,function(o,k){
+			return "<p data-id='"+o.source+"' class='st-tl-wrap "+getSpClass(o.source)+"'><em style='background-color:#"+o.color+"'></em><strong>"+o.name+"</strong></p>";
+		}).join("");
+		$(".st-title").html(tlHtml);
+		new proTypeTwo('btnStar', 'bBar','btnEnd',false);
+		new proTypeTwo('btnEnd', 'bBar','btnStar',true);
+		
+		//绑定选定事件
+		$(".st-tl-wrap").click(function(){
+			var lId = $(this).data("id");
+			if( !$(this).hasClass("Del") ){
+				arrDel.push( lId );
+				//SpliceItem( arrDelData, lId );
+				$(this).addClass("Del");
+			}else{
+				removeId( arrDel, lId );
+				//PushItem( zqData, arrDelData, lId );
+				$(this).removeClass("Del");
+			}
+			//console.info(arrDel)
+			
+			updateData( arrDel, zqData);
+		})
+		 
+		
+		
+	}
+}
+function getSpClass(id){
+	for(var i=0;i<arrDel.length;i++){
+		if(arrDel[i]==id){
+			return "Del";	
+		}	
+	}	
+}
+//total总记录数 val要删掉的记录//zqData
+function SpliceItem( arrDelData, id ) {
+    for (var i = 0; i < arrDelData.length; i++) {
+        if (arrDelData[i].source == id) {
+            arrDelData.splice(i, 1);
+			i--;//符合规则 回滚1个索引
+        }
+    }
+}
+//total总记录数 val要删掉的记录//zqData
+function PushItem( zqData, arrDelData, id ) {
+    for (var i = 0; i < zqData.length; i++) {
+        if (zqData[i].source == id) {
+            arrDelData.push( zqData[i] );
+        }
+    }
+}
+function removeId( arrid, id ) {
+    for ( var i = 0; i<arrid.length; i++ ) {
+        if (arrid[i] == id) {
+            arrid.splice(i, 1);
+        }
+    }
+}
+//根据id返回元素zqData原始数据, arrDelData临时数据,id标识
+function getJsonEle( zqData, arrDelData,id ){
+	for (var i = 0; i < zqData.length; i++) {
+        if (zqData[i].id == id) {
+            arrDelData.push(zqData[i]);
+        }
+    }
+}
+var iComTime = 0;//双向选择点时间范围
+//动态改变数据模型
+function changeData( starTime, endTime, callback ){
+	var ets = $("#btnEnd i").html().split("-");
+	starTime = starTime==undefined ? new Date() : starTime;
+	endTime = endTime==undefined ? new Date( ets[0],ets[1]-1,ets[2] ) : endTime;
+	//当前时间份额
+	iComTime = Date.parse(endTime) - Date.parse(starTime);
+	$(".z-item > div >p").each(function(i, e) {
+        //重新定义宽度
+		var pTime = $(e).data("date").split(",");
+		var dpTime = Date.parse( new Date(pTime[0],pTime[1]-1,pTime[2],pTime[3],pTime[4],pTime[5]) )
+		//对 大于开始时间的 和 小于结束时间的 计算
+		if( dpTime>=Date.parse(starTime) ){
+			//计算P宽度
+			var timeC = dpTime - Date.parse(starTime);//当前时间差
+			var timeCA = Date.parse(endTime)-Date.parse(starTime);//总的份额差
+			var iWidth_ = Math.min( 100, (timeC/timeCA).toFixed(2)*100 ) + "%";
+			$(e).stop(false,false).animate({"width":iWidth_});
+		}else{
+			//不符合规则的设置宽度为0
+			$(e).stop(false,false).animate({"width":0});
+		}
+    });
+	//重新划统计图分时间
+	$(".star-time").html( formatDate(starTime,"yyyy-MM-dd") );
+	$(".end-time").html( formatDate(endTime,"yyyy-MM-dd") );
+	//重新 设置5分点 时间
+	var oStrongs = $("#zWrap > strong");
+	if( iComTime > 86400000*7 ){//时间范围大于7日 显示5分时间点
+		oStrongs.show();
+		oStrongs.each(function(i, e) {
+			$(this).find('span').html(  formatDate( new Date(Date.parse(starTime)+iComTime*(0.25*(i+1))),'yyyy-MM-dd' )  );
+		});	
+	}else{
+		oStrongs.hide();
+	}
+	//时间拖拽控件 重新赋值
+	var to = document.getElementById("vLine").offsetLeft;
+	$('.v-line font span').html(formatDate(new Date(Date.parse(new Date(starTime))+iComTime*(to/$('.z-wrap').width())),'yyyy-MM-dd'));
+	$('.v-line i b').html(formatDate(new Date(Date.parse(new Date(starTime))+iComTime*(to/$('.z-wrap').width())),'yyyy-MM-dd'));
+	
+	
+	callback&&callback();
+}
+
+/**
+* 时间格式化 如：formatDate("2010-04-30", "yyyy-MM-dd HH:mm:ss")
+*/
+function formatDate(date, format) { 
+	if (!date) return "";   
+	if (!format) format = "yyyy-MM-dd HH:mm:ss";
+	switch(typeof date) { 
+		case "string":   
+			date = new Date(date.replace(/-/g, "/"));
+			break;   
+		case "number":   
+			date = new Date(date);
+			break;   
+	}    
+	if (!date instanceof Date) return "";   
+	var dict = {   
+		"yyyy": date.getFullYear(),   
+		"M": date.getMonth() + 1,   
+		"d": date.getDate(),   
+		"H": date.getHours(),   
+		"m": date.getMinutes(),   
+		"s": date.getSeconds(),   
+		"MM": ("" + (date.getMonth() + 101)).substr(1),   
+		"dd": ("" + (date.getDate() + 100)).substr(1),   
+		"HH": ("" + (date.getHours() + 100)).substr(1),   
+		"mm": ("" + (date.getMinutes() + 100)).substr(1),   
+		"ss": ("" + (date.getSeconds() + 100)).substr(1)   
+	};       
+	return format.replace(/(yyyy|MM?|dd?|HH?|ss?|mm?)/g, function() {   
+		return dict[arguments[0]];   
+	});                   
+} 	
+//格式化货币
+function formatMoney(s){
+	if(s == "undefined" || s == null ) return "0";
+	s = (s+"").replace(",","");
+	if(/[^0-9\.]/.test(s)) return "格式错误";
+	s=s.replace(/^(\d*)$/,"$1.");
+	s=(s+"00").replace(/(\d*\.\d\d)\d*/,"$1");
+	s=s.replace(".",",");
+	var re=/(\d)(\d{3},)/;
+	while(re.test(s))
+			s=s.replace(re,"$1,$2");
+	s=s.replace(/,(\d\d)$/,".$1");
+	//return "￥" + s.replace(/^\./,"0.")
+	return s.replace(/^\./,"0.")
+}
+//匹配颜色
+function getNewColor(id,type,index_,name_){
+	var iFlag = 0;
+	var arrColors = ["e1c7f7","cac7f7","c7d9f7","c7edf7","c7f7f2","c7f7d9","c7f7c7","ddf7c7","edf7c7","f7f4c7"];//["c0c0f3","a6a7f4","9292f6","7e7ef7","6c6cf7","2092e9","3c8dcc","5858f8","4444f7","2828f8"];
+	$(arrNcolor).each(function(i, e) {
+    	if(e.source == type){
+			iFlag ++;	
+		}
+    });
+	if(iFlag==0){
+		var arr_ = {id:id,source:type,color:arrColors[index_%10],name:name_};
+		arrNcolor.push(arr_);
+	}
+}
+var getRandomColor = function(){//随机生成颜色
+  return  '#' +    
+    (function(color){    
+    return (color +=  '0123456789abcdef'[Math.floor(Math.random()*16)])    
+      && (color.length == 6) ?  color : arguments.callee(color);    
+  })('');    
+} 
+//获取颜色
+function getArrColor(type){
+	var iColor = "";
+	$(arrNcolor).each(function(i, e) {
+    	if(e.source == type){
+			iColor = e.color;
+		}
+    });
+	return iColor;
+}
+
+var tjsj = new statistics($(".z-wrap"));
+var rTotalLog_ = tjsj.init( zqData );
+
+//var jj = zqData.length;
+//setInterval(function(){
+//	jj--;
+//	zqData.length=jj;
+//	rTotalLog_ = tjsj.init(zqData);
+//},2000)
+
+//重新组织数据
+function updateData( arrDel_, zqData_ ){
+	var nZqData = [];
+	nZqData.lenght = 0;
+	//复制zqData数据
+	for( var i=0; i<zqData_.length; i++){
+		nZqData.push(zqData_[i]);
+	}
+	for( var i=0; i<arrDel_.length; i++ ){
+		for( var j=0; j<nZqData.length; j++ ){
+			if(nZqData[j].source == arrDel_[i]){
+				//nZqData.push(zqData_[j]);
+				nZqData.splice(j, 1);
+				j--;
+			}	
+		}	
+	}
+	if(nZqData.length==0){
+		$(".z-wrap").fadeOut();
+	}else{
+		$(".z-wrap").show();
+		tjsj = new statistics($(".z-wrap"));
+		rTotalLog_ = tjsj.init( nZqData );
+		new proType('vLine', 'zWrap', 'title0',function(){});
+		new proTypeY('vLineI', 'vLine', 'title0','zWrap',function(){});
+	}
+	
+	//tjsj.init(nZqData);
+	
+}
+
+function getFmoney(){
+	//计算剩余份额
+	var iLine = $('.v-line');
+	var iLineLeft = iLine.offset().left-$('.z-item').offset().left;
+	var iBodys = $('.z-item');
+	var freeMf = $('.free-mf');
+	var totalFree = 0;
+	//计算有效日期总份额
+	rTotalLog_ = 0;
+	freeMf.each(function(i, e) {
+        if( $(this).width()>=iLineLeft ){
+			rTotalLog_ += parseInt($(this).data('amoney'));	
+		}
+    });
+	
+	iBodys.each(function(i, e) {
+		$(e).find('.share').each(function(j, o) {
+			//console.log(($(this).parent().find('.free-mf').width()>=iLineLeft ));
+			if( $(this).width()+1>iLineLeft&&$(this).parent().find('.free-mf').width()>=iLineLeft ){//宽度大于 线 的left边距离
+				totalFree += parseFloat($(this).data('money'));
+			}
+		});
+	});
+	//$('.v-line i').data('value',rTotalLog_-totalFree);
+	$('.v-line i span').html(rTotalLog_-totalFree);
+	$('.v-line i').stop().animate({left: -( $('.v-line i').width()/2)-5 })
+	var vlLeft = $('.v-line').css('left');
+	var tWidth = $('.z-wrap').width();
+	$('.v-line i').attr('title',formatDate(new Date(Date.parse(new Date())+totalMillisecond*(parseInt(vlLeft)/tWidth)),'yyyy-MM-dd'));
+}
+
+function showMoney(a) {
+    var b = a,
+    c = 1e5 * parseFloat(b.data("value"));
+    if (1e4 > c) {
+        var d = (c / 1e5).toFixed(2);
+        b.html(d)
+    } else var e = 0,
+    f = 0,
+    g = 0,
+    h = setInterval(function() {
+        if (9 > g) {
+            g++,
+            e += f * Math.random();
+            var a = (e / 1e5).toFixed(2);
+            //b.html(a + "%"),
+			b.html(a),
+            f = c - e
+        } else {
+            var a = (c / 1e5).toFixed(2);
+            //b.html(a + "%"),
+			b.html(a),
+            clearInterval(h)
+        }
+    },
+    50)
+}
+
+var proType = function(btn, bar, title,callback){
+		this.btn = document.getElementById(btn);
+		this.bar = document.getElementById(bar);
+		this.title = document.getElementById(title);
+		this.init();
+		callback&&callback();
+	};
+	proType.prototype = {
+		init: function () {
+			var This = this, d = document, w = window, m = Math;
+			This.btn.onmousedown = function (e) {
+				var x = (e || w.event).clientX;
+				var l = this.offsetLeft;
+				var max = This.bar.offsetWidth - this.offsetWidth;
+				var nowFe = iComTime==0?totalMillisecond:iComTime;
+				var sDate_ = $("#btnStar i").data("time")==undefined?new Date():$("#btnStar i").data("time");
+				
+				$(This.btn).find('i b').fadeIn();
+				
+				d.onmousemove = function (e) {
+					var thisX = (e || w.event).clientX;
+					var to = m.min(max, m.max(0, l + (thisX - x)));
+					This.btn.style.left = to + 'px';
+					This.ondrag(m.round(m.max(0, to / max) * 100), to);
+					w.getSelection ? w.getSelection().removeAllRanges() : d.selection.empty();
+					$('.v-line font span').html(formatDate(new Date(Date.parse(new Date(sDate_))+nowFe*(to/$('.z-wrap').width())),'yyyy-MM-dd'));
+					$('.v-line i b').html(formatDate(new Date(Date.parse(new Date(sDate_))+nowFe*(to/$('.z-wrap').width())),'yyyy-MM-dd'));
+				};
+				document.onmouseup = function(){
+					getFmoney();
+					document.onmousemove=null;
+					document.getElementById('vLineI')?document.getElementById('vLineI').onmousemove=null:'';
+					$(This.btn).find('i b').fadeOut();
+					//$("#bar0 em").data("width",iw_);
+				}
+			};
+		},
+		ondrag: function (pos, x) {
+			iw_ = Math.max(0, x) + 5;
+		}
+	}
+	new proType('vLine', 'zWrap', 'title0',function(){});
+	
+var proTypeY = function(btn, bar, title,fcon,callback){
+		this.btn = document.getElementById(btn);
+		this.bar = document.getElementById(bar);
+		this.title = document.getElementById(title);
+		this.fcon = document.getElementById(fcon); 
+		this.init();
+		callback&&callback();
+	};
+	proTypeY.prototype = {
+		init: function () {
+			var This = this, d = this.btn, w = window, m = Math;
+			d.onmousedown = function (e) {
+				var y = (e || w.event).clientY;
+				var t = this.offsetTop;
+				var max = This.bar.offsetHeight - this.offsetHeight;
+				
+				This.fcon.onmousemove = function (e) {
+					var thisY = (e || w.event).clientY;
+					var to = m.min(max, m.max(0, t + (thisY - y)));
+					This.btn.style.top = to + 'px';
+					This.ondrag(m.round(m.max(0, to / max) * 100), to);
+					w.getSelection ? w.getSelection().removeAllRanges() : d.selection.empty();
+				};
+				d.onmouseup = function(){
+					getFmoney();
+					document.onmousemove=null;
+					This.btn.onmousemove=null;
+					This.fcon.onmousemove=null;
+				}
+			};
+		},
+		ondrag: function (pos, y) {
+			iw_ = Math.max(0, y) + 5;
+		}
+	}
+	new proTypeY('vLineI', 'vLine', 'title0','zWrap',function(){});
+
+
+
+</script>
+
+</html>
